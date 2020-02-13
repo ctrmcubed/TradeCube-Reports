@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeCube-Reports", "TradeCube-Reports\TradeCube-Reports.csproj", "{76403454-6D92-4A5D-B7C8-F187B5B179D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeCube-Reports", "src\TradeCube-Reports\TradeCube-Reports.csproj", "{76403454-6D92-4A5D-B7C8-F187B5B179D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
