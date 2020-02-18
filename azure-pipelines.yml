@@ -32,15 +32,21 @@ steps:
     dockerRegistryEndpoint: Docker Hub
     dockerComposeFile: docker-compose.yml
     action: Build services
-    additionalImageTags: |
-      $(Build.BuildId)
-      ctrmcubed/tradecube-reports
+    additionalImageTags: $(Build.BuildId)
 # - task: Docker@2
   # displayName: Docker login
   # inputs:
     # command: login
     # containerregistrytype: 'Container Registry'
     # containerRegistry: 'Docker Hub'
+- task: Docker@2
+  displayName: 'Push tradecube-reports'
+  inputs:
+    command: Push
+    containerregistrytype: 'Container Registry'
+    containerRegistry: 'Docker Hub'
+    repository: tradecube-reports
+    tags: $(Build.BuildId)
 - task: Docker@2
   displayName: 'Push tradecube-reports'
   inputs:
