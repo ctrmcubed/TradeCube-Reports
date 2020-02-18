@@ -33,7 +33,7 @@ steps:
     command: Push
     containerregistrytype: 'Container Registry'
     containerRegistry: 'Docker Hub'
-    repository: tradecube-reports
+    repository: ctrmcubed/tradecube-reports
     tags: $(Build.BuildId)
 # - task: HelmInstaller@1
   # displayName: 'Install Helm (2.16.1)'
