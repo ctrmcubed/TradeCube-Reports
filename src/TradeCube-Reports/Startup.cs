@@ -40,7 +40,13 @@ namespace TradeCube_Reports
             });
 
             services.AddScoped<ITradeCubeConfiguration, TradeCubeConfiguration>();
-            services.AddScoped<IConfirmationService, ConfirmationService>();
+
+            // Services
+            services.AddScoped<IConfirmationReportService, ConfirmationReportReportService>();
+            services.AddScoped<ICountryLookupService, CountryLookupService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IReportTemplateService, ReportTemplateService>();
+            services.AddScoped<IReportRenderService, ReportRenderService>();
             services.AddScoped<ITradeService, TradeService>();
         }
 

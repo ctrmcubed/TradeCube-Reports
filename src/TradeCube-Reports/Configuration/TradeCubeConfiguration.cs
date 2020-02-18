@@ -4,13 +4,22 @@ namespace TradeCube_Reports.Configuration
 {
     public class TradeCubeConfiguration : ITradeCubeConfiguration
     {
-        public string TradeCubeApiKey { get; }
-        public string TradeCubeApiBaseAddress { get; }
+        public string TradeCubeApiDomain { get; set; }
+        public string TradeCubeApiPort { get; set; }
 
         public TradeCubeConfiguration()
         {
-            TradeCubeApiKey = Environment.GetEnvironmentVariable("TRADECUBE_APIKEY");
-            TradeCubeApiBaseAddress = Environment.GetEnvironmentVariable("TRADECUBE_APIBASEADDRESS");
+            TradeCubeApiDomain = Environment.GetEnvironmentVariable("TRADECUBE_API_DOMAIN");
+            TradeCubeApiPort = Environment.GetEnvironmentVariable("TRADECUBE_API_PORT");
+        }
+
+        public string WebApiUrl() => $"{TradeCubeApiDomain}{Port(TradeCubeApiPort)}/";
+
+        private static string Port(string port)
+        {
+            return string.IsNullOrEmpty(port)
+                ? string.Empty
+                : $":{port}";
         }
     }
 }

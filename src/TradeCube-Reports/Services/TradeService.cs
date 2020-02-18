@@ -21,20 +21,16 @@ namespace TradeCube_Reports.Services
             this.logger = logger;
         }
 
-        public async Task<ApiResponseWrapper<IEnumerable<TradeDataObject>>> Trades(string apiKey, TradeRequest tradeRequest)
+        public async Task<ApiResponseWrapper<IEnumerable<TradeDataObject>>> Trades(string apiJwtToken, TradeRequest tradeRequest)
         {
             try
             {
-                var tradeReferences = string.Join(",", tradeRequest.TradeReferences);
-
                 var query = new JObject
                 {
-                    new JProperty("TradeReference", new JObject(new JProperty("$in", new JArray(tradeReferences))))
+                    new JProperty("TradeReference", new JObject(new JProperty("$in", new JArray(tradeRequest.TradeReferences))))
                 };
 
-                var data = await Post<ApiResponseWrapper<IEnumerable<TradeDataObject>>>(apiKey, query);
-
-                return data;
+                return await Post<ApiResponseWrapper<IEnumerable<TradeDataObject>>>(apiJwtToken, "Trade/query", query);
             }
             catch (Exception e)
             {

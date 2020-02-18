@@ -5,8 +5,8 @@ using TradeCube_Reports.Messages;
 
 namespace TradeCube_Reports.Services
 {
-    public interface ITradeService
+    public interface ICountryService
     {
-        Task<ApiResponseWrapper<IEnumerable<TradeDataObject>>> Trades(string apiJwtToken, TradeRequest tradeRequest);
+        Task<ApiResponseWrapper<IEnumerable<CountryDataObject>>> Countries(string apiJwtToken);
     }
 }

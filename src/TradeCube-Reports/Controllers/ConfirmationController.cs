@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
-using TradeCube_Reports.DataObjects;
 using TradeCube_Reports.Messages;
 using TradeCube_Reports.Models;
 using TradeCube_Reports.ReportParameters;
@@ -15,29 +14,31 @@ namespace TradeCube_Reports.Controllers
     [Produces("application/json")]
     [ApiController]
     [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     public class ConfirmationController : ControllerBase
     {
-        private readonly IConfirmationService confirmationService;
+        private readonly IConfirmationReportService confirmationReportService;
         private readonly ILogger<ConfirmationController> logger;
 
-        public ConfirmationController(IConfirmationService confirmationService, ILogger<ConfirmationController> logger)
+        public ConfirmationController(IConfirmationReportService confirmationReportService, ILogger<ConfirmationController> logger)
         {
-            this.confirmationService = confirmationService;
+            this.confirmationReportService = confirmationReportService;
             this.logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Get([FromHeader] string apiKey, [FromBody] ConfirmationReportRequest confirmationReportRequest)
+        public async Task<IActionResult> Confirmation([FromHeader] string apiJwtToken, [FromBody] ConfirmationReportRequest confirmationReportRequest)
         {
             try
             {
-                var confirmationReportParameters = new ConfirmationReportParameters
+                var confirmationReportParameters = new ConfirmationReportParametersBase
                 {
-                    ApiKey = apiKey,
+                    ApiJwtToken = apiJwtToken,
+                    Template = confirmationReportRequest.Template,
                     TradeReferences = confirmationReportRequest.TradeReferences
                 };
 
-                var confirmationReport = await confirmationService.CreateReport(confirmationReportParameters);
+                var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
 
                 return confirmationReport.Status == ApiConstants.SuccessResult
                     ? (IActionResult)Ok(confirmationReport)

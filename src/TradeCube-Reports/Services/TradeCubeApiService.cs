@@ -4,6 +4,7 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AspNetCore.Http.Extensions;
 using TradeCube_Reports.Configuration;
 
 namespace TradeCube_Reports.Services
@@ -12,18 +13,18 @@ namespace TradeCube_Reports.Services
     {
         private readonly ILogger<TradeCubeApiService> logger;
 
-        public TradeCubeApiService(IHttpClientFactory httpClientFactory, ITradeCubeConfiguration tradeCubeConfiguration,
-            ILogger<TradeCubeApiService> logger) : base(httpClientFactory, tradeCubeConfiguration)
+        protected TradeCubeApiService(IHttpClientFactory httpClientFactory, ITradeCubeConfiguration tradeCubeConfiguration, ILogger<TradeCubeApiService> logger)
+            : base(httpClientFactory, tradeCubeConfiguration)
         {
             this.logger = logger;
         }
 
-        public async Task<TV> Post<TV>(string apiKey, JObject request)
+        protected async Task<TV> Get<TV>(string apiJwtToken, string action)
         {
             try
             {
-                var client = CreateClient(apiKey);
-                var response = await client.PostAsJsonAsync("Trade/query", request);
+                var client = CreateClient(apiJwtToken);
+                var response = await client.GetAsync(action);
 
                 response.EnsureSuccessStatusCode();
 
@@ -31,9 +32,29 @@ namespace TradeCube_Reports.Services
 
                 logger.LogDebug(responseStream.ToString());
 
-                var data = await JsonSerializer.DeserializeAsync<TV>(responseStream);
+                return await JsonSerializer.DeserializeAsync<TV>(responseStream);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
 
-                return data;
+        protected async Task<TV> Post<TV>(string apiJwtToken, string action, JObject request)
+        {
+            try
+            {
+                var client = CreateClient(apiJwtToken);
+                var response = await client.PostAsJsonAsync(action, request);
+
+                response.EnsureSuccessStatusCode();
+
+                await using var responseStream = await response.Content.ReadAsStreamAsync();
+
+                logger.LogDebug(responseStream.ToString());
+
+                return await JsonSerializer.DeserializeAsync<TV>(responseStream);
             }
             catch (Exception e)
             {

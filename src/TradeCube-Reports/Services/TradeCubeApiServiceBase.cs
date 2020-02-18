@@ -15,12 +15,12 @@ namespace TradeCube_Reports.Services
             this.tradeCubeConfiguration = tradeCubeConfiguration;
         }
 
-        protected HttpClient CreateClient(string apiKey)
+        protected HttpClient CreateClient(string apiJwtToken)
         {
             var client = clientFactory.CreateClient();
 
-            client.BaseAddress = new Uri(tradeCubeConfiguration.TradeCubeApiBaseAddress);
-            client.DefaultRequestHeaders.Add("apiKey", apiKey);
+            client.BaseAddress = new Uri(tradeCubeConfiguration.WebApiUrl());
+            client.DefaultRequestHeaders.Add("apiJwtToken", apiJwtToken);
 
             return client;
         }

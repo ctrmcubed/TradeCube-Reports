@@ -1,6 +1,6 @@
 ﻿namespace TradeCube_Reports.Models
 {
-    public class ConfirmationReport
+    public class ReportTemplate
     {
         public string Html { get; set; }
     }

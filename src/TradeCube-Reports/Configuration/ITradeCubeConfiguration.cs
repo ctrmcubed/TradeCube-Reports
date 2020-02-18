@@ -2,7 +2,8 @@
 {
     public interface ITradeCubeConfiguration
     {
-        string TradeCubeApiKey { get; }
-        string TradeCubeApiBaseAddress { get; }
+        string TradeCubeApiDomain { get; set; }
+        string TradeCubeApiPort { get; set; }
+        public string WebApiUrl();
     }
 }

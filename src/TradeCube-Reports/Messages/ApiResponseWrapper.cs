@@ -1,19 +1,12 @@
-﻿using TradeCube_Reports.Messages;
-
-namespace TradeCube_Reports.DataObjects
+﻿namespace TradeCube_Reports.Messages
 {
     public class ApiResponseWrapper<T> : ApiResponse
     {
         public int? RecordCount { get; set; }
-        public T Data { get; }
+        public T Data { get; set; }
 
         public ApiResponseWrapper()
         {
-        }
-
-        public ApiResponseWrapper(T data)
-        {
-            Data = data;
         }
 
         public ApiResponseWrapper(string status, T data)
