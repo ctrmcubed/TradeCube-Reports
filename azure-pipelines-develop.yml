@@ -1,0 +1,42 @@
+name: $(build.buildId)_$(Date:yyyyMMdd)_$(BuildDefinitionName)_$(SourceBranchName)
+trigger:
+- develop
+resources:
+- repo: self
+pool:
+  vmImage: ubuntu-latest
+variables:
+  projectName: tradecube-reports
+  versionMajor: 0
+  versionMinor: 0
+steps:
+# - task: replacetokens@3
+  # inputs:
+    # targetFiles: '**/*.yaml'
+    # encoding: 'auto'
+    # writeBOM: true
+    # actionOnMissing: 'warn'
+    # keepToken: false
+    # tokenPrefix: '##{'
+    # tokenSuffix: '}##'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Hub'
+    repository: 'ctrmcubed/tradecube-reports'
+    command: 'buildAndPush'
+    Dockerfile: '**/src/TradeCube-Reports/Dockerfile'
+    buildContext: 'src'
+# - task: HelmInstaller@1
+  # displayName: 'Install Helm (2.16.1)'
+  # inputs:
+    # helmVersionToInstall: '2.16.1'
+# - task: HelmDeploy@0
+  # displayName: 'helm package'
+  # inputs:
+    # connectionType: ''
+    # kubernetesServiceConnection: ''
+    # command: package
+    # chartPath: kubernetes/helm/$(projectName)
+    # arguments: '--version $(versionMajor).$(versionMinor).$(build.buildId) --app-version $(versionMajor).$(versionMinor).$(build.buildId)'
+# - bash: 'curl --data-binary "@$(build.artifactStagingDirectory)/$(projectName)-$(versionMajor).$(versionMinor).$(build.buildId).tgz" http://<helm chart repository>'
+  # displayName: 'Bash Script'
