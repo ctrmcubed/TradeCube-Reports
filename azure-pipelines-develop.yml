@@ -1,6 +1,6 @@
 name: $(build.buildId)_$(Date:yyyyMMdd)_$(BuildDefinitionName)_$(SourceBranchName)
 trigger:
-- master
+- develop
 resources:
 - repo: self
 pool:
