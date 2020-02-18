@@ -4,9 +4,9 @@ trigger:
 resources:
 - repo: self
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 variables:
-  projectName: 'tradecube-reports'
+  projectName: tradecube-reports
   versionMajor: 0
   versionMinor: 0
 steps:
@@ -19,16 +19,30 @@ steps:
     # keepToken: false
     # tokenPrefix: '##{'
     # tokenSuffix: '}##'
-- task: DockerCompose@0
-  displayName: 'Build services'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'Docker Hub'
-    dockerComposeFile: 'docker-compose.yml'
-    action: 'Build services'
-    additionalImageTags: $(Build.BuildId)
 - task: Docker@2
-  displayName: Push tradecube-reports
+  displayName: Docker login
+  inputs:
+    command: login
+    containerregistrytype: Container Registry
+    containerRegistry: Docker Hub
+- task: DockerCompose@0
+  displayName: Build services
+  inputs:
+    containerregistrytype: Container Registry
+    dockerRegistryEndpoint: Docker Hub
+    dockerComposeFile: docker-compose.yml
+    action: Build services
+    additionalImageTags: |
+      $(Build.BuildId)
+      ctrmcubed/tradecube-reports
+# - task: Docker@2
+  # displayName: Docker login
+  # inputs:
+    # command: login
+    # containerregistrytype: 'Container Registry'
+    # containerRegistry: 'Docker Hub'
+- task: Docker@2
+  displayName: 'Push tradecube-reports'
   inputs:
     command: Push
     containerregistrytype: 'Container Registry'
