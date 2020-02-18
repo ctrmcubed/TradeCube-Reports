@@ -20,41 +20,12 @@ steps:
     # tokenPrefix: '##{'
     # tokenSuffix: '}##'
 - task: Docker@2
-  displayName: Docker login
   inputs:
-    command: login
-    containerregistrytype: Container Registry
-    containerRegistry: Docker Hub
-- task: DockerCompose@0
-  displayName: Build services
-  inputs:
-    containerregistrytype: Container Registry
-    dockerRegistryEndpoint: Docker Hub
-    dockerComposeFile: docker-compose.yml
-    action: Build services
-    additionalImageTags: $(Build.BuildId)
-# - task: Docker@2
-  # displayName: Docker login
-  # inputs:
-    # command: login
-    # containerregistrytype: 'Container Registry'
-    # containerRegistry: 'Docker Hub'
-- task: Docker@2
-  displayName: 'Push tradecube-reports'
-  inputs:
-    command: Push
-    containerregistrytype: 'Container Registry'
     containerRegistry: 'Docker Hub'
-    repository: tradecube-reports
-    tags: $(Build.BuildId)
-- task: Docker@2
-  displayName: 'Push tradecube-reports'
-  inputs:
-    command: Push
-    containerregistrytype: 'Container Registry'
-    containerRegistry: 'Docker Hub'
-    repository: ctrmcubed/tradecube-reports
-    tags: $(Build.BuildId)
+    repository: 'ctrmcubed/tradecube-reports'
+    command: 'buildAndPush'
+    Dockerfile: '**/src/TradeCube-Reports/Dockerfile'
+    buildContext: 'src'
 # - task: HelmInstaller@1
   # displayName: 'Install Helm (2.16.1)'
   # inputs:
