@@ -20,4 +20,4 @@ spec:
   - port: {{ .Values.service.httpsPort }}
     targetPort: {{ .Values.port.reporting }}
     protocol: {{ .Values.service.protocol }}
-    name: {{ .Release.Name }}{{ .Values.component.reporting }}
+    name: {{ .Release.Name }}{{ .Values.component.reporting }}-secure
