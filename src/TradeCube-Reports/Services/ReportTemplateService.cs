@@ -41,7 +41,7 @@ namespace TradeCube_Reports.Services
 
             return templateType switch
             {
-                "confirmation" => await ReadFile(TemplateConstants.ConfirmationTemplateFile),
+                TemplateConstants.ConfirmationTemplate => await ReadFile(TemplateConstants.ConfirmationTemplateFile),
                 _ => new ApiResponseWrapper<ReportTemplate> { Status = ApiConstants.FailedResult, Message = $"Unknown template type ({templateType})" }
             };
         }

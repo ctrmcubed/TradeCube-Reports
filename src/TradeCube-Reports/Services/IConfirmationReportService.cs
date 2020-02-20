@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using TradeCube_Reports.Messages;
-using TradeCube_Reports.Models;
 using TradeCube_Reports.ReportParameters;
 
 namespace TradeCube_Reports.Services
 {
     public interface IConfirmationReportService
     {
-        Task<ApiResponseWrapper<ConfirmationReport>> CreateReport(ConfirmationReportParametersBase confirmationReportParametersBase);
+        Task<ApiResponseWrapper<WebServiceResponse>> CreateReport(ConfirmationReportParameters confirmationReportParameters);
     }
 }

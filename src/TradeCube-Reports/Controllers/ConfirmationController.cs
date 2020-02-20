@@ -4,7 +4,6 @@ using System;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.Messages;
-using TradeCube_Reports.Models;
 using TradeCube_Reports.ReportParameters;
 using TradeCube_Reports.Services;
 
@@ -27,15 +26,15 @@ namespace TradeCube_Reports.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Confirmation([FromHeader] string apiJwtToken, [FromBody] ConfirmationReportRequest confirmationReportRequest)
+        public async Task<IActionResult> Confirmation([FromHeader] string apiJwtToken, [FromBody] WebServiceRequest webServiceRequest)
         {
             try
             {
-                var confirmationReportParameters = new ConfirmationReportParametersBase
+                var confirmationReportParameters = new ConfirmationReportParameters
                 {
                     ApiJwtToken = apiJwtToken,
-                    Template = confirmationReportRequest.Template,
-                    TradeReferences = confirmationReportRequest.TradeReferences
+                    Template = TemplateConstants.ConfirmationTemplate,
+                    TradeReferences = webServiceRequest.Entities
                 };
 
                 var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
@@ -47,7 +46,7 @@ namespace TradeCube_Reports.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, e.Message);
-                return BadRequest(new ApiResponseWrapper<ConfirmationReport> { Message = e.Message, Status = ApiConstants.FailedResult });
+                return BadRequest(new ApiResponseWrapper<WebServiceResponse> { Message = e.Message, Status = ApiConstants.FailedResult });
             }
         }
     }

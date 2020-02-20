@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.DataObjects;
 using TradeCube_Reports.Messages;
-using TradeCube_Reports.Models;
 using TradeCube_Reports.ReportParameters;
 
 namespace TradeCube_Reports.Services
@@ -18,8 +17,7 @@ namespace TradeCube_Reports.Services
         private readonly IReportRenderService reportRenderService;
         private readonly ICountryLookupService countryLookupService;
 
-        public ConfirmationReportReportService(ITradeService tradeService, ICountryLookupService countryLookupService, IReportTemplateService reportTemplateService,
-            IReportRenderService reportRenderService)
+        public ConfirmationReportReportService(ITradeService tradeService, ICountryLookupService countryLookupService, IReportTemplateService reportTemplateService, IReportRenderService reportRenderService)
         {
             this.tradeService = tradeService;
             this.countryLookupService = countryLookupService;
@@ -27,25 +25,25 @@ namespace TradeCube_Reports.Services
             this.reportRenderService = reportRenderService;
         }
 
-        public async Task<ApiResponseWrapper<ConfirmationReport>> CreateReport(ConfirmationReportParametersBase confirmationReportParametersBase)
+        public async Task<ApiResponseWrapper<WebServiceResponse>> CreateReport(ConfirmationReportParameters confirmationReportParameters)
         {
             try
             {
-                var apiJwtToken = confirmationReportParametersBase.ApiJwtToken;
-                var request = new TradeRequest { TradeReferences = confirmationReportParametersBase.TradeReferences };
+                var apiJwtToken = confirmationReportParameters.ApiJwtToken;
+                var request = new TradeRequest { TradeReferences = confirmationReportParameters.TradeReferences };
                 var trades = await tradeService.Trades(apiJwtToken, request);
-                var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParametersBase);
-                var template = await reportTemplateService.ReportTemplate(confirmationReportParametersBase.Template);
+                var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParameters);
+                var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
                 var tradeDataObjects = enrichedTrades.ToList();
                 var report = await reportRenderService.Render(template?.Data?.Html, tradeDataObjects);
                 var reader = new StreamReader(report.Content);
-                var text = reader.ReadToEnd();
+                var data = reader.ReadToEnd();
 
-                return new ApiResponseWrapper<ConfirmationReport> { Status = ApiConstants.SuccessResult, Data = new ConfirmationReport { Html = text } };
+                return new ApiResponseWrapper<WebServiceResponse> { Status = ApiConstants.SuccessResult, Data = new WebServiceResponse { Data = data } };
             }
             catch (Exception e)
             {
-                return new ApiResponseWrapper<ConfirmationReport> { Status = ApiConstants.FailedResult, Message = e.Message };
+                return new ApiResponseWrapper<WebServiceResponse> { Status = ApiConstants.FailedResult, Message = e.Message };
             }
         }
 
