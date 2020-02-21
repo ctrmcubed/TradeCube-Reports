@@ -26,9 +26,9 @@ spec:
   tls:
   - secretName: {{ .Release.Name }}{{ .Values.type.certificate }}{{ .Values.type.secret }}
     hosts:
-    - {{ .Values.env.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
+    - {{ .Values.ingress.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
   rules:
-  - host: {{ .Values.env.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
+  - host: {{ .Values.ingress.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
     http:
       paths:
       - path: /
