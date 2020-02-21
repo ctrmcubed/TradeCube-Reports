@@ -26,6 +26,9 @@ steps:
     command: 'buildAndPush'
     Dockerfile: '**/src/TradeCube-Reports/Dockerfile'
     buildContext: 'src'
+    tags: |
+      $(Build.BuildId)
+      latest-dev
 # - task: HelmInstaller@1
   # displayName: 'Install Helm (2.16.1)'
   # inputs:

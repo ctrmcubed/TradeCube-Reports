@@ -4,19 +4,22 @@ name:
 env:
   HTTPPrefix: http://                  # {{ .Values.env.HTTPPrefix }}
   HTTPSPrefix: https://                # {{ .Values.env.HTTPSPrefix }}
-  certPassword: <not-set>              # {{ .Values.env.certPassword }}
+  certPassword: ''                     # {{ .Values.env.certPassword }}
   certificateNamePrefix: /certs/       # {{ .Values.env.certificateNamePrefix }}     
   certificateNameSuffix: <not-set>     # {{ .Values.env.certificateNameSuffix }}
   environment: <not-set>               # {{ .Values.env.environment }}
+  apiDomain: api.tradecube.io          # {{ .Values.env.environment }}
+  apiPort: 443                         # {{ .Values.env.apiPort }}
 
 service:
   port: 80       # {{ .Values.service.port }}
   targetPort: 80 # {{ .Values.service.targetPort }}
+  httpPort: 80   # {{ .Values.service.httpPort }}
   httpsPort: 443 # {{ .Values.service.httpsPort }}
   protocol: TCP  # {{ .Values.service.protocol }}
 
 ingress:
-  enabled: false
+  ingressReportingDomain: reporting
 
 type:
   configmap: -config-map  # {{ .Values.type.configmap }}
@@ -31,12 +34,16 @@ component:
 letsencrypt:
   clusterIssuer: <TBA>        # {{ .Values.letsencrypt.clusterIssuer }}
 
+certificate:
+  volumeName: <TBA> # {{ .Values.certificate.volumeName }}
+
 image:
   repository: ctrmcubed        # {{ .Values.image.repository }}
   pullPolicy: IfNotPresent     # {{ .Values.image.pullPolicy }}
   reporting: tradecube-reports # {{ .Values.image.reporting }}
+  reportingtag: latest-dev     # {{ .Values.image.reportingtag }}
 
-port:
+port:   
   reporting: 44370     # {{ .Values.port.reporting }}
   reporting-ssl: 44365 # {{ .Values.port.reporting-ssl }}
 
