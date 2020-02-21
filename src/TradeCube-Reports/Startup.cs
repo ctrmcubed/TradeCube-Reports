@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +12,8 @@ namespace TradeCube_Reports
 {
     public class Startup
     {
-        private IConfiguration configuration;
+        // ReSharper disable once NotAccessedField.Local
+        private readonly IConfiguration configuration;
 
         public Startup(IConfiguration configuration)
         {

@@ -35,11 +35,19 @@ namespace TradeCube_Reports.Services
                 var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParameters);
                 var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
                 var tradeDataObjects = enrichedTrades.ToList();
-                var report = await reportRenderService.Render(template?.Data?.Html, tradeDataObjects);
+                var report = await reportRenderService.Render(template?.Data?.Html, confirmationReportParameters.Format, tradeDataObjects);
                 var reader = new StreamReader(report.Content);
                 var data = reader.ReadToEnd();
 
-                return new ApiResponseWrapper<WebServiceResponse> { Status = ApiConstants.SuccessResult, Data = new WebServiceResponse { Data = data } };
+                return new ApiResponseWrapper<WebServiceResponse>
+                {
+                    Status = ApiConstants.SuccessResult,
+                    Data = new WebServiceResponse
+                    {
+                        ActionName = confirmationReportParameters.ActionName,
+                        Data = data
+                    }
+                };
             }
             catch (Exception e)
             {

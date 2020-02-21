@@ -7,7 +7,7 @@ namespace TradeCube_Reports.Services
 {
     public class ReportRenderService : IReportRenderService
     {
-        public async Task<Report> Render<T>(string template, T content)
+        public async Task<Report> Render<T>(string template, string format, T content)
         {
             var rs = new LocalReporting()
                 .UseBinary(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
