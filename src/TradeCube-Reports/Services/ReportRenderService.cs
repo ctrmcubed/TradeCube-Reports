@@ -2,6 +2,8 @@
 using jsreport.Types;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using TradeCube_Reports.Constants;
+using TradeCube_Reports.Exceptions;
 
 namespace TradeCube_Reports.Services
 {
@@ -20,7 +22,7 @@ namespace TradeCube_Reports.Services
             {
                 Template = new Template
                 {
-                    Recipe = Recipe.Html,
+                    Recipe = MapFormatToRecipe(format),
                     Engine = Engine.Handlebars,
                     Content = template
                 },
@@ -31,6 +33,16 @@ namespace TradeCube_Reports.Services
             });
 
             return report;
+        }
+
+        public Recipe MapFormatToRecipe(string format)
+        {
+            return format switch
+            {
+                FormatConstants.Pdf => Recipe.ChromePdf,
+                FormatConstants.Html => Recipe.Html,
+                _ => throw new RecipeException($"Recipe for {format} is not supported for this service")
+            };
         }
     }
 }

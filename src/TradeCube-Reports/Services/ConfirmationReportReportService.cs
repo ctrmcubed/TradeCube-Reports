@@ -45,7 +45,8 @@ namespace TradeCube_Reports.Services
                     Data = new WebServiceResponse
                     {
                         ActionName = confirmationReportParameters.ActionName,
-                        Data = data
+                        Format = confirmationReportParameters.Format,
+                        Data = data,
                     }
                 };
             }
