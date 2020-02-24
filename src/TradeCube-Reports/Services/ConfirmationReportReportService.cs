@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.DataObjects;
@@ -15,20 +17,25 @@ namespace TradeCube_Reports.Services
         private readonly ITradeService tradeService;
         private readonly IReportTemplateService reportTemplateService;
         private readonly IReportRenderService reportRenderService;
+        private readonly ILogger<ConfirmationReportReportService> logger;
         private readonly ICountryLookupService countryLookupService;
 
-        public ConfirmationReportReportService(ITradeService tradeService, ICountryLookupService countryLookupService, IReportTemplateService reportTemplateService, IReportRenderService reportRenderService)
+        public ConfirmationReportReportService(ITradeService tradeService, ICountryLookupService countryLookupService, IReportTemplateService reportTemplateService, IReportRenderService reportRenderService,
+            ILogger<ConfirmationReportReportService> logger)
         {
             this.tradeService = tradeService;
             this.countryLookupService = countryLookupService;
             this.reportTemplateService = reportTemplateService;
             this.reportRenderService = reportRenderService;
+            this.logger = logger;
         }
 
         public async Task<ApiResponseWrapper<WebServiceResponse>> CreateReport(ConfirmationReportParameters confirmationReportParameters)
         {
             try
             {
+                logger.LogDebug(JsonSerializer.Serialize(confirmationReportParameters));
+
                 var apiJwtToken = confirmationReportParameters.ApiJwtToken;
                 var request = new TradeRequest { TradeReferences = confirmationReportParameters.TradeReferences };
                 var trades = await tradeService.Trades(apiJwtToken, request);

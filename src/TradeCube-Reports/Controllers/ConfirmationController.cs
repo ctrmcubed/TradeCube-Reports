@@ -28,12 +28,10 @@ namespace TradeCube_Reports.Controllers
         [HttpPost]
         public async Task<IActionResult> Confirmation([FromHeader] string apiJwtToken, [FromBody] WebServiceRequest webServiceRequest)
         {
-            // Response.Headers.Add("Content-Disposition",$"inline; filename=\"{file.Name}\""); 
-            // return File(file.CreateReadStream(), "application/pdf", file.Name);
-            // https://danielhillebrand.com/2017/09/show-pdf-in-browser-instead-of-downloading-asp-net-mvc-without-javascript/
-
             try
             {
+                logger.LogInformation("Received 'Confirmation' request...");
+
                 var confirmationReportParameters = new ConfirmationReportParameters
                 {
                     ApiJwtToken = apiJwtToken,
