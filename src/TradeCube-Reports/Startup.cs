@@ -48,6 +48,8 @@ namespace TradeCube_Reports
             services.AddScoped<IReportTemplateService, ReportTemplateService>();
             services.AddScoped<IReportRenderService, ReportRenderService>();
             services.AddScoped<ITradeService, TradeService>();
+
+            services.AddHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +72,7 @@ namespace TradeCube_Reports
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
         }
