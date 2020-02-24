@@ -35,7 +35,8 @@ letsencrypt:
   clusterIssuer: <TBA>        # {{ .Values.letsencrypt.clusterIssuer }}
 
 certificate:
-  volumeName: <TBA> # {{ .Values.certificate.volumeName }}
+  volumeName: -cert-volume # {{ .Values.certificate.volumeName }}  
+  volumeMountPath: /certs  # {{ .Values.certificate.volumeMountPath }}
 
 image:
   repository: ctrmcubed        # {{ .Values.image.repository }}
