@@ -41,11 +41,6 @@ namespace TradeCube_Reports.Controllers
                     TradeReferences = webServiceRequest.Entities
                 };
 
-                if (confirmationReportParameters.Format == FormatConstants.Pdf)
-                {
-                    return await confirmationReportService.CreatePdfReport(confirmationReportParameters);
-                }
-
                 var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
 
                 return confirmationReport.Status == ApiConstants.SuccessResult

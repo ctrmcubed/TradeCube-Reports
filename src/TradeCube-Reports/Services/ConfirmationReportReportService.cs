@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,9 +43,9 @@ namespace TradeCube_Reports.Services
                 var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
                 var tradeDataObjects = enrichedTrades.ToList();
                 var report = await reportRenderService.Render(template?.Data?.Html, confirmationReportParameters.Format, tradeDataObjects);
-                var reader = new StreamReader(report.Content);
-                var data = reader.ReadToEnd();
+                var ms = new MemoryStream();
 
+                report.Content.CopyTo(ms);
 
                 return new ApiResponseWrapper<WebServiceResponse>
                 {
@@ -56,32 +54,15 @@ namespace TradeCube_Reports.Services
                     {
                         ActionName = confirmationReportParameters.ActionName,
                         Format = confirmationReportParameters.Format,
-                        Data = data
+                        Data = Convert.ToBase64String(ms.ToArray())
                     }
                 };
             }
             catch (Exception e)
             {
+                logger.LogError(e, e.Message);
                 return new ApiResponseWrapper<WebServiceResponse> { Status = ApiConstants.FailedResult, Message = e.Message };
             }
-        }
-
-        public async Task<FileStreamResult> CreatePdfReport(ConfirmationReportParameters confirmationReportParameters)
-        {
-            var apiJwtToken = confirmationReportParameters.ApiJwtToken;
-            var request = new TradeRequest { TradeReferences = confirmationReportParameters.TradeReferences };
-            var trades = await tradeService.Trades(apiJwtToken, request);
-            var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParameters);
-            var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
-            var tradeDataObjects = enrichedTrades.ToList();
-            var report = await reportRenderService.Render(template?.Data?.Html, confirmationReportParameters.Format, tradeDataObjects);
-            //var reader = new StreamReader(report.Content);
-            //var data = reader.ReadToEnd();
-
-            var memoryStream = new MemoryStream();
-            await report.Content.CopyToAsync(memoryStream);
-
-            return new FileStreamResult(memoryStream, new MediaTypeHeaderValue("application/pdf"));
         }
 
         async Task<IEnumerable<TradeDataObject>> EnrichTradesWithCountries(IEnumerable<TradeDataObject> trades, ReportParametersBase confirmationReportParametersBase)
