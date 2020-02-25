@@ -7,7 +7,7 @@ pool:
   vmImage: ubuntu-latest
 variables:
   projectName: tradecube-reports
-  versionMajor: 0
+  versionMajor: 1
   versionMinor: 0
 steps:
 - task: Docker@2
@@ -20,3 +20,16 @@ steps:
     tags: |
       $(Build.BuildId)
       latest-dev
+- task: HelmInstaller@1
+  displayName: 'Install Helm (3.0.3)'
+  inputs:
+    helmVersionToInstall: '3.0.3'
+- task: HelmDeploy@0
+  displayName: 'helm package'
+  inputs:
+    command: package
+    chartPath: '$(System.DefaultWorkingDirectory)/_ctrmcubed_TradeCube-Reports/kubernetes/helm/tradecube-reports'
+    chartVersion: '$(versionMajor).$(versionMinor).$(build.buildId)'
+    destination: '$(System.DefaultWorkingDirectory)'
+    save: false
+    arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'

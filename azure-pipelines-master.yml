@@ -7,65 +7,29 @@ pool:
   vmImage: ubuntu-latest
 variables:
   projectName: tradecube-reports
-  versionMajor: 0
+  versionMajor: 1
   versionMinor: 0
 steps:
-# - task: replacetokens@3
-  # inputs:
-    # targetFiles: '**/*.yaml'
-    # encoding: 'auto'
-    # writeBOM: true
-    # actionOnMissing: 'warn'
-    # keepToken: false
-    # tokenPrefix: '##{'
-    # tokenSuffix: '}##'
 - task: Docker@2
-  displayName: Docker login
   inputs:
-    command: login
-    containerregistrytype: Container Registry
-    containerRegistry: Docker Hub
-- task: DockerCompose@0
-  displayName: Build services
-  inputs:
-    containerregistrytype: Container Registry
-    dockerRegistryEndpoint: Docker Hub
-    dockerComposeFile: docker-compose.yml
-    action: Build services
-    additionalImageTags: $(Build.BuildId)
-# - task: Docker@2
-  # displayName: Docker login
-  # inputs:
-    # command: login
-    # containerregistrytype: 'Container Registry'
-    # containerRegistry: 'Docker Hub'
-- task: Docker@2
-  displayName: 'Push tradecube-reports'
-  inputs:
-    command: Push
-    containerregistrytype: 'Container Registry'
     containerRegistry: 'Docker Hub'
-    repository: tradecube-reports
-    tags: $(Build.BuildId)
-- task: Docker@2
-  displayName: 'Push tradecube-reports'
+    repository: 'ctrmcubed/tradecube-reports'
+    command: 'buildAndPush'
+    Dockerfile: '**/src/TradeCube-Reports/Dockerfile'
+    buildContext: 'src'
+    tags: |
+      $(Build.BuildId)
+      latest-qa'
+- task: HelmInstaller@1
+  displayName: 'Install Helm (3.0.3)'
   inputs:
-    command: Push
-    containerregistrytype: 'Container Registry'
-    containerRegistry: 'Docker Hub'
-    repository: ctrmcubed/tradecube-reports
-    tags: $(Build.BuildId)
-# - task: HelmInstaller@1
-  # displayName: 'Install Helm (2.16.1)'
-  # inputs:
-    # helmVersionToInstall: '2.16.1'
-# - task: HelmDeploy@0
-  # displayName: 'helm package'
-  # inputs:
-    # connectionType: ''
-    # kubernetesServiceConnection: ''
-    # command: package
-    # chartPath: kubernetes/helm/$(projectName)
-    # arguments: '--version $(versionMajor).$(versionMinor).$(build.buildId) --app-version $(versionMajor).$(versionMinor).$(build.buildId)'
-# - bash: 'curl --data-binary "@$(build.artifactStagingDirectory)/$(projectName)-$(versionMajor).$(versionMinor).$(build.buildId).tgz" http://<helm chart repository>'
-  # displayName: 'Bash Script'
+    helmVersionToInstall: '3.0.3'
+- task: HelmDeploy@0
+  displayName: 'helm package'
+  inputs:
+    command: package
+    chartPath: '$(System.DefaultWorkingDirectory)/_ctrmcubed_TradeCube-Reports/kubernetes/helm/tradecube-reports'
+    chartVersion: '$(versionMajor).$(versionMinor).$(build.buildId)'
+    destination: '$(System.DefaultWorkingDirectory)'
+    save: false
+    arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'
