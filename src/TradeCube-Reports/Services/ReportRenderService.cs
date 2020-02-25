@@ -35,12 +35,14 @@ namespace TradeCube_Reports.Services
             return report;
         }
 
-        public Recipe MapFormatToRecipe(string format)
+        private Recipe MapFormatToRecipe(string format)
         {
             return format switch
             {
                 FormatConstants.Pdf => Recipe.ChromePdf,
                 FormatConstants.Html => Recipe.Html,
+                FormatConstants.Xlsx => Recipe.HtmlToXlsx,
+                FormatConstants.Txt => Recipe.HtmlToText,
                 _ => throw new RecipeException($"Recipe for {format} is not supported for this service")
             };
         }
