@@ -22,11 +22,12 @@ ingress:
   ingressReportingDomain: reporting
 
 type:
-  configmap: -config-map  # {{ .Values.type.configmap }}
-  deployment: -deployment # {{ .Values.type.deployment }}
-  ingress: -ingress       # {{ .Values.type.ingress }}
-  pod: -pod               # {{ .Values.type.pod }}
-  service: -service       # {{ .Values.type.service }}
+  certificate: -certificate  # {{ .Values.type.certificate }}
+  configmap: -config-map     # {{ .Values.type.configmap }}
+  deployment: -deployment    # {{ .Values.type.deployment }}
+  ingress: -ingress          # {{ .Values.type.ingress }}
+  pod: -pod                  # {{ .Values.type.pod }}
+  service: -service          # {{ .Values.type.service }}
 
 component:
   reporting: -reporting         # {{ .Values.component.reporting }}
