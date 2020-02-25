@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AspNetCore.Http.Extensions;
 using TradeCube_Reports.Configuration;
 
 namespace TradeCube_Reports.Services
@@ -46,13 +46,16 @@ namespace TradeCube_Reports.Services
             try
             {
                 var client = CreateClient(apiJwtToken);
+
+                logger.LogInformation($"POST: BaseAddress={client.BaseAddress}, Action={action}, Request={JsonSerializer.Serialize(request)}");
+
                 var response = await client.PostAsJsonAsync(action, request);
 
                 response.EnsureSuccessStatusCode();
 
                 await using var responseStream = await response.Content.ReadAsStreamAsync();
 
-                logger.LogDebug(responseStream.ToString());
+                logger.LogInformation(responseStream.ToString());
 
                 return await JsonSerializer.DeserializeAsync<TV>(responseStream);
             }

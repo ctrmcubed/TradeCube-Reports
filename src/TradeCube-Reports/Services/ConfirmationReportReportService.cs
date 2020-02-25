@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.DataObjects;
@@ -34,8 +33,6 @@ namespace TradeCube_Reports.Services
         {
             try
             {
-                logger.LogDebug(JsonSerializer.Serialize(confirmationReportParameters));
-
                 var apiJwtToken = confirmationReportParameters.ApiJwtToken;
                 var request = new TradeRequest { TradeReferences = confirmationReportParameters.TradeReferences };
                 var trades = await tradeService.Trades(apiJwtToken, request);

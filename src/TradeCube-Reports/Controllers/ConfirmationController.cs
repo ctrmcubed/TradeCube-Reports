@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.Messages;
@@ -40,6 +41,8 @@ namespace TradeCube_Reports.Controllers
                     Format = webServiceRequest.Format,
                     TradeReferences = webServiceRequest.Entities
                 };
+
+                logger.LogDebug(JsonSerializer.Serialize(confirmationReportParameters));
 
                 var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
 
