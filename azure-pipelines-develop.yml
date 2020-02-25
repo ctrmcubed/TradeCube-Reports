@@ -33,3 +33,8 @@ steps:
     destination: '$(Build.ArtifactStagingDirectory)'
     save: false
     arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'HelmChart'
+    publishLocation: 'pipeline'
