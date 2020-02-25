@@ -1,14 +1,19 @@
+# Check with:
+# helm3 lint tradecube-reports
+# OPTIONS='--dry-run --debug'
+# Run with:
+# helm3 upgrade --install --namespace ${REPORTING_NAMESPACE} ${REPORTING_NAMESPACE} --set ingress.domain=${DOMAIN} --set env.certFile=${REPORTING_CERTFILE} --set env.certPassword=${REPORTING_CERTPASSWORD} --set env.apiDomain=${API_DOMAIN} tradecube-reports ${OPTIONS}
+
 name:
   name: 'Tradecube-Reporting' # {{ .Values.name.name }}
 
 env:
   HTTPPrefix: http://                  # {{ .Values.env.HTTPPrefix }}
   HTTPSPrefix: https://                # {{ .Values.env.HTTPSPrefix }}
-  certPassword: ''                     # {{ .Values.env.certPassword }}
-  certificateNamePrefix: /certs/       # {{ .Values.env.certificateNamePrefix }}     
-  certificateNameSuffix: <not-set>     # {{ .Values.env.certificateNameSuffix }}
+  certFile: <not-set>                  # {{ .Values.env.certFile }}     
+  certPassword: <not-set>              # {{ .Values.env.certPassword }}
   environment: <not-set>               # {{ .Values.env.environment }}
-  apiDomain: api.tradecube.io          # {{ .Values.env.environment }}
+  apiDomain: https://api.tradecube.io  # {{ .Values.env.apiDomain }}
   apiPort: 443                         # {{ .Values.env.apiPort }}
 
 service:
@@ -19,7 +24,7 @@ service:
   protocol: TCP  # {{ .Values.service.protocol }}
 
 ingress:
-  ingressReportingDomain: reporting
+  domain: reporting.example.com
 
 type:
   certificate: -certificate  # {{ .Values.type.certificate }}
@@ -27,6 +32,7 @@ type:
   deployment: -deployment    # {{ .Values.type.deployment }}
   ingress: -ingress          # {{ .Values.type.ingress }}
   pod: -pod                  # {{ .Values.type.pod }}
+  secret: -secret            # {{ .Values.type.secret }}
   service: -service          # {{ .Values.type.service }}
 
 component:
@@ -47,7 +53,7 @@ image:
 
 port:   
   reporting: 44370     # {{ .Values.port.reporting }}
-  reporting-ssl: 44365 # {{ .Values.port.reporting-ssl }}
+  reportingSsl: 44365  # {{ .Values.port.reportingSsl }}
 
 restartPolicy:
   reporting: Always # {{ .Values.restartPolicy.reporting }}
