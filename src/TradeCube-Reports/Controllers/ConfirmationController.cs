@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TradeCube_Reports.Constants;
 using TradeCube_Reports.Messages;
@@ -42,7 +41,11 @@ namespace TradeCube_Reports.Controllers
                     TradeReferences = webServiceRequest.Entities
                 };
 
-                logger.LogDebug(JsonSerializer.Serialize(confirmationReportParameters));
+                logger.LogDebug($"ApiJwtToken: {confirmationReportParameters.ApiJwtToken}");
+                logger.LogDebug($"ActionName: {confirmationReportParameters.ActionName}");
+                logger.LogDebug($"Template: {confirmationReportParameters.Template}");
+                logger.LogDebug($"Format: {confirmationReportParameters.Format}");
+                logger.LogDebug($"TradeReferences: {string.Join(',', webServiceRequest?.Entities)}");
 
                 var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
 

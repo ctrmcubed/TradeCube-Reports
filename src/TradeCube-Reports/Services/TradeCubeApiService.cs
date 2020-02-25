@@ -47,7 +47,7 @@ namespace TradeCube_Reports.Services
             {
                 var client = CreateClient(apiJwtToken);
 
-                logger.LogInformation($"POST: BaseAddress={client.BaseAddress}, Action={action}, Request={JsonSerializer.Serialize(request)}");
+                logger.LogInformation($"POST: BaseAddress={client.BaseAddress}, Action={action}");
 
                 var response = await client.PostAsJsonAsync(action, request);
 
