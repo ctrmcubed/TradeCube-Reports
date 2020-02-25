@@ -67,8 +67,8 @@ spec:
             # port: {{ .Values.port.reporting }}
           # initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           # periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-      # volumes:
-        # - name: {{ .Release.Name }}{{ .Values.certificate.volumeName }}
-          # secret:
-            # secretName: {{ .Release.Name }}{{ .Values.type.secret }}
+      volumes:
+        - name: {{ .Release.Name }}{{ .Values.certificate.volumeName }}
+          secret:
+            secretName: {{ .Release.Name }}{{ .Values.type.secret }}
       restartPolicy: Always
