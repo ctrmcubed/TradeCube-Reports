@@ -26,12 +26,12 @@ spec:
   tls:
   - secretName: {{ .Release.Name }}{{ .Values.type.certificate }}{{ .Values.type.secret }}
     hosts:
-    - {{ .Values.ingress.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
+    - {{ .Values.ingress.domain }}
   rules:
-  - host: {{ .Values.ingress.ingressReportingDomain }}{{ .Values.domain.environmentSuffix }}.{{ .Values.domain.domain }}
+  - host: {{ .Values.ingress.domain }}
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ .Release.Name }}{{ .Values.component.reporting }}{{ .Values.type.service }}
-          servicePort: {{ .Values.port.reporting }}
+          servicePort: {{ .Values.port.reportingSsl }}

@@ -16,6 +16,9 @@ steps:
     repository: 'ctrmcubed/tradecube-reports'
     command: 'buildAndPush'
     Dockerfile: '**/src/TradeCube-Reports/Dockerfile'
+<<<<<<< HEAD
+    buildContext: 'src'
+=======
     buildContext: 'src'
     tags: |
       $(Build.BuildId)
@@ -33,3 +36,4 @@ steps:
     destination: '$(System.DefaultWorkingDirectory)'
     save: false
     arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'
+>>>>>>> devops

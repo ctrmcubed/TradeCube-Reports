@@ -16,8 +16,8 @@ spec:
   - port: {{ .Values.service.httpPort }}
     targetPort: {{ .Values.port.reporting }}
     protocol: {{ .Values.service.protocol }}
-    name: {{ .Release.Name }}{{ .Values.component.reporting }}
+    name: http
   - port: {{ .Values.service.httpsPort }}
-    targetPort: {{ .Values.port.reporting }}
+    targetPort: {{ .Values.port.reportingSsl }}
     protocol: {{ .Values.service.protocol }}
-    name: {{ .Release.Name }}{{ .Values.component.reporting }}-secure
+    name: https

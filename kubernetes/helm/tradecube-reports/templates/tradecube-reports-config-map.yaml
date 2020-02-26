@@ -10,8 +10,8 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 data:  
-  TRADECUBE_REPORTS_HTTPS_PORT: {{ .Values.env.environment }}
-  TRADECUBE_REPORTS_CERT_NAME: {{ .Values.env.certificateNamePrefix }}{{ .Values.env.certificateNameSuffix }}
+  TRADECUBE_REPORTS_HTTPS_PORT: '{{ .Values.port.reportingSsl }}'
+  TRADECUBE_REPORTS_CERT_NAME: {{ .Values.env.certFile }}
   TRADECUBE_REPORTS_CERT_PASSWORD: '{{ .Values.env.certPassword }}'
-  TRADECUBE_API_DOMAIN: {{ .Values.env.environment }}
-  TRADECUBE_API_PORT: {{ .Values.env.environment }}
+  TRADECUBE_API_DOMAIN: {{ .Values.env.apiDomain }}
+  TRADECUBE_API_PORT: '{{ .Values.env.apiPort }}'
