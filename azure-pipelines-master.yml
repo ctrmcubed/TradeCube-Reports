@@ -33,3 +33,7 @@ steps:
     destination: '$(Build.ArtifactStagingDirectory)/$(versionMajor).$(versionMinor).$(build.buildId)'
     save: false
     arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: BuildOutputs
