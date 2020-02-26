@@ -36,24 +36,32 @@ namespace TradeCube_Reports.Services
                 var apiJwtToken = confirmationReportParameters.ApiJwtToken;
                 var request = new TradeRequest { TradeReferences = confirmationReportParameters.TradeReferences };
                 var trades = await tradeService.Trades(apiJwtToken, request);
-                var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParameters);
-                var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
-                var tradeDataObjects = enrichedTrades.ToList();
-                var report = await reportRenderService.Render(template?.Data?.Html, confirmationReportParameters.Format, tradeDataObjects);
-                var ms = new MemoryStream();
 
-                report.Content.CopyTo(ms);
-
-                return new ApiResponseWrapper<WebServiceResponse>
+                if (trades.Status == ApiConstants.SuccessResult)
                 {
-                    Status = ApiConstants.SuccessResult,
-                    Data = new WebServiceResponse
+                    var enrichedTrades = await EnrichTradesWithCountries(trades.Data, confirmationReportParameters);
+                    var template = await reportTemplateService.ReportTemplate(confirmationReportParameters.Template);
+                    var tradeDataObjects = enrichedTrades.ToList();
+                    var report = await reportRenderService.Render(template?.Data?.Html,
+                        confirmationReportParameters.Format, tradeDataObjects);
+                    var ms = new MemoryStream();
+
+                    report.Content.CopyTo(ms);
+
+                    return new ApiResponseWrapper<WebServiceResponse>
                     {
-                        ActionName = confirmationReportParameters.ActionName,
-                        Format = confirmationReportParameters.Format,
-                        Data = Convert.ToBase64String(ms.ToArray())
-                    }
-                };
+                        Status = ApiConstants.SuccessResult,
+                        Data = new WebServiceResponse
+                        {
+                            ActionName = confirmationReportParameters.ActionName,
+                            Format = confirmationReportParameters.Format,
+                            Data = Convert.ToBase64String(ms.ToArray())
+                        }
+                    };
+                }
+
+                logger.LogError("Error calling Trade API", trades.Message);
+                return new ApiResponseWrapper<WebServiceResponse> { Status = ApiConstants.FailedResult, Message = trades.Message };
             }
             catch (Exception e)
             {

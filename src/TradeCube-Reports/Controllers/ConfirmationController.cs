@@ -30,8 +30,6 @@ namespace TradeCube_Reports.Controllers
         {
             try
             {
-                logger.LogInformation("Received 'Confirmation' request...");
-
                 var confirmationReportParameters = new ConfirmationReportParameters
                 {
                     ApiJwtToken = apiJwtToken,
@@ -40,12 +38,6 @@ namespace TradeCube_Reports.Controllers
                     Format = webServiceRequest.Format,
                     TradeReferences = webServiceRequest.Entities
                 };
-
-                logger.LogDebug($"ApiJwtToken: {confirmationReportParameters.ApiJwtToken}");
-                logger.LogDebug($"ActionName: {confirmationReportParameters.ActionName}");
-                logger.LogDebug($"Template: {confirmationReportParameters.Template}");
-                logger.LogDebug($"Format: {confirmationReportParameters.Format}");
-                logger.LogDebug($"TradeReferences: {string.Join(',', webServiceRequest?.Entities)}");
 
                 var confirmationReport = await confirmationReportService.CreateReport(confirmationReportParameters);
 
