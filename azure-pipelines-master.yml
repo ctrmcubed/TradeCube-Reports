@@ -28,8 +28,8 @@ steps:
   displayName: 'helm package'
   inputs:
     command: package
-    chartPath: '$(System.DefaultWorkingDirectory)/_ctrmcubed_TradeCube-Reports/kubernetes/helm/tradecube-reports'
+    chartPath: '**/kubernetes/helm/tradecube-reports'
     chartVersion: '$(versionMajor).$(versionMinor).$(build.buildId)'
-    destination: '$(System.DefaultWorkingDirectory)'
+    destination: '$(Build.ArtifactStagingDirectory)/$(versionMajor).$(versionMinor).$(build.buildId)'
     save: false
     arguments: '--app-version $(versionMajor).$(versionMinor).$(build.buildId)'
