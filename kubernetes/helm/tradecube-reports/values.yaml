@@ -39,7 +39,7 @@ component:
   reporting: -reporting         # {{ .Values.component.reporting }}
 
 letsencrypt:
-  clusterIssuer: <TBA>        # {{ .Values.letsencrypt.clusterIssuer }}
+  clusterIssuer: letsencrypt-prod # {{ .Values.letsencrypt.clusterIssuer }}
 
 certificate:
   volumeName: -cert-volume # {{ .Values.certificate.volumeName }}  
@@ -49,7 +49,7 @@ image:
   repository: ctrmcubed        # {{ .Values.image.repository }}
   pullPolicy: IfNotPresent     # {{ .Values.image.pullPolicy }}
   reporting: tradecube-reports # {{ .Values.image.reporting }}
-  reportingtag: latest-dev     # {{ .Values.image.reportingtag }}
+  reportingTag: latest         # {{ .Values.image.reportingTag }}
 
 port:   
   reporting: 44370     # {{ .Values.port.reporting }}
