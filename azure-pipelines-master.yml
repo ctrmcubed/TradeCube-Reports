@@ -19,7 +19,7 @@ steps:
     buildContext: 'src'
     tags: |
       $(Build.BuildId)
-      latest-qa'
+      latest-qa
 - task: HelmInstaller@1
   displayName: 'Install Helm (3.0.3)'
   inputs:
